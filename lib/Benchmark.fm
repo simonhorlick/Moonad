@@ -1,0 +1,31 @@
+// Benchmark contains the result of benchmarking a function.
+T Benchmark
+| Benchmark.new(name: String, elapsed: Duration);
+
+// benchmark calculates the amount of time required to execute the given
+// function fn. The function is executed repeatedly until the result is
+// statistically significant.
+Benchmark.benchmark(name: String, fn: Nat -> Nat): IO(Benchmark)
+  do IO {
+    var start = IO.get_monotonic_clock("");
+    // Is it possible to have the function call to fn within this block,
+    // rather than delegating to another function?
+    Benchmark.benchmark.do(start, name, fn);
+  }
+
+Benchmark.benchmark.do(start: Nat, name: String, fn: Nat -> Nat): IO(Benchmark)
+  let x = fn(0)
+  do IO {
+    var end = IO.get_monotonic_clock("");
+    return Benchmark.new(name, Stopwatch.duration(start, end));
+  }
+
+Benchmark.show(benchmark: Benchmark): String
+  get name elapsed = benchmark
+  String.flatten([name, "\t", Duration.show(elapsed)])
+
+Benchmark.test: IO(Unit)
+  do IO {
+    var b = Benchmark.benchmark("test", (x) Fib.fib(35));
+    IO.print(Benchmark.show(b));
+  }

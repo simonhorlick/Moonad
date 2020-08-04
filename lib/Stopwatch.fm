@@ -1,0 +1,21 @@
+// Instant represents the instantaneous reading of a stopwatch at a point in
+// time.
+Stopwatch.Instant: Type
+  Nat
+
+// sample the current time on the stopwatch. The readings given are monotonic,
+// i.e. the stopwatch is not subject to jumps in time due to the clock
+// settings of the machine, and does not jump due to leap seconds. Internally
+// an Instant is the number of nanoseconds since an arbitrary time in the
+// past, which is process-specific. This means that it is only sensible to
+// compare Instants taken during the execution of a single program and
+// Instants should not be serialised or compared across processes.
+Stopwatch.sample: IO(Stopwatch.Instant)
+  do IO {
+    var nat = IO.get_monotonic_clock("");
+    return nat;
+  }
+
+// duration calculates the amount of time that has elapsed between two instants.
+Stopwatch.duration(a: Stopwatch.Instant, b: Stopwatch.Instant): Duration
+  Nat.sub(b, a)

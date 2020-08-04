@@ -1,0 +1,5 @@
+Fib.fib(n: Nat): Nat
+  if Nat.ltn(n, 2) then
+    n
+  else
+    Nat.add(Fib.fib(Nat.sub(n, 1)), Fib.fib(Nat.sub(n, 2)))

@@ -1,0 +1,8 @@
+// get_monotonic_clock fetches the current high-resolution time in nanoseconds
+// from the runtime. Times returned by this function are relative to an
+// arbitrary point in the past and are only useful for calculating durations.
+// It can be used for performance measurements as this time source is not
+// subject to clock skew, or leap seconds.
+IO.get_monotonic_clock(text: String): IO(Nat)
+  use clock = IO.ask<Nat>("get_monotonic_clock", "")
+  IO.end<Nat>(Nat.parse_decimal(clock))

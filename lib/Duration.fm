@@ -1,0 +1,24 @@
+// Duration represents a length of time. 
+Duration: Type
+  Nat
+
+Duration.nanos_per_second: Nat
+  1000000000
+
+Duration.seconds_per_minute: Nat
+  60
+
+Duration.minutes_per_hour: Nat
+  60
+
+Duration.seconds(duration: Duration): Nat
+  Nat.div(duration, Duration.nanos_per_second)
+
+Duration.minutes(duration: Duration): Nat
+  Nat.div(Duration.seconds(duration), Duration.seconds_per_minute)
+
+Duration.hours(duration: Duration): Nat
+  Nat.div(Duration.minutes(duration), Duration.minutes_per_hour)
+
+Duration.show(duration: Duration): String
+  String.concat(Nat.show(duration), "ns")
